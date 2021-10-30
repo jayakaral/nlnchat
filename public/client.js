@@ -56,5 +56,5 @@ socket.on('left', name => {
 });
 
 function scrollToBottom() {
-    messageArea.scrollTop = messageArea.scrollHeight
+    messageContainer.scrollTop = messageContainer.scrollHeight
 }
