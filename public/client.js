@@ -1,52 +1,51 @@
-const socket = io()
-let name;
-let textarea = document.querySelector('#textarea')
-let sendbtn = document.querySelector('#sendbtn')
-let messageArea = document.querySelector('.message__area')
-do {
-    name = prompt('Please enter your name: ')
-} while (!name)
+const socket = io();
+
+const sendbtn = document.getElementById('send-btn');
+const messageInput = document.getElementById('messageInp');
+const messageContainer = document.querySelector('.container');
+// var audio = new Audio('ting.mp3');
+const name = prompt("enter your name to join");
+
+
+const append = (cname, message, position) => {
+    const d = new Date();
+    let lt = d.toLocaleTimeString();
+    const messageElement = document.createElement('div');
+    messageElement.innerHTML = `<h5>${cname} ${lt}</h5><p>${message}</p>`;
+    messageElement.classList.add('message');
+    messageElement.classList.add(position);
+    messageContainer.append(messageElement);
+    // if (position == 'left') {
+    //     audio.play();
+    // }
+}
+
+messageInput.oninput = () => {
+    if (messageInput.value == "") {
+        sendbtn.style.display = "none";
+    } else {
+        sendbtn.style.display = "block";
+    }
+};
 
 sendbtn.addEventListener('click', () => {
-
-    sendMessage(textarea.value)
-
+    const message = messageInput.value;
+    append(`${name}`, `${message}`, 'right');
+    socket.emit('send', message);
+    sendbtn.style.display = "none";
+    messageInput.value = "";
 })
 
-function sendMessage(message) {
-    let msg = {
-            user: name,
-            message: message.trim()
-        }
-        // Append 
-    appendMessage(msg, 'outgoing')
-    textarea.value = ''
-    scrollToBottom()
 
-    // Send to server 
-    socket.emit('message', msg)
+socket.emit('new-user-joined', name);
 
-}
+socket.on('user-joined', name => {
+    append(`${name}`, `${name} joined the chat`, 'right');
+});
 
-function appendMessage(msg, type) {
-    let mainDiv = document.createElement('div')
-    let className = type
-    mainDiv.classList.add(className, 'message')
-
-    let markup = `
-        <h4>${msg.user}</h4>
-        <p>${msg.message}</p>
-    `
-    mainDiv.innerHTML = markup
-    messageArea.appendChild(mainDiv)
-}
-
-// Recieve messages 
-socket.on('message', (msg) => {
-    appendMessage(msg, 'incoming')
-    scrollToBottom()
-})
-
-function scrollToBottom() {
-    messageArea.scrollTop = messageArea.scrollHeight
-}
+socket.on('receive', data => {
+    append(`${data.name}`, `${data.message}`, 'left');
+});
+socket.on('left', name => {
+    append(`${name}`, `${name} left the chat`, 'right');
+});
