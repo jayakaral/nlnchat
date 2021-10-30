@@ -34,6 +34,7 @@ sendbtn.addEventListener('click', () => {
     socket.emit('send', message);
     sendbtn.style.display = "none";
     messageInput.value = "";
+    scrollToBottom();
 })
 
 
@@ -41,11 +42,19 @@ socket.emit('new-user-joined', name);
 
 socket.on('user-joined', name => {
     append(`${name}`, `${name} joined the chat`, 'right');
+    scrollToBottom();
 });
 
 socket.on('receive', data => {
     append(`${data.name}`, `${data.message}`, 'left');
+    scrollToBottom();
 });
+
 socket.on('left', name => {
     append(`${name}`, `${name} left the chat`, 'right');
+    scrollToBottom();
 });
+
+function scrollToBottom() {
+    messageArea.scrollTop = messageArea.scrollHeight
+}
