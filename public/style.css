@@ -36,8 +36,7 @@ h1 {
 
 .message {
     width: 24%;
-    padding: 10px;
-    padding-top: 2px;
+    padding: 5px 10px;
     margin: 1px auto;
     position: relative;
     border-radius: 10px;
@@ -78,9 +77,12 @@ h1 {
 
 #messageInp {
     width: 100%;
-    padding: 10px;
+    padding: 10px 20px;
     border: 1px solid #000;
     border-radius: 30px;
+    resize: none;
+    max-height: 140px;
+    height: 43px;
 }
 
 #messageInp:focus,
