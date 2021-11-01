@@ -46,7 +46,7 @@ sendbtn.addEventListener('click', () => {
 socket.emit('new-user-joined', name);
 
 socket.on('user-joined', name => {
-    append(`${name}`, `${name} joined the chat`, 'right');
+    append(`${name}`, `<span join>${name} joined the chat</span>`, 'right');
     scrollToBottom();
 });
 
@@ -56,7 +56,7 @@ socket.on('receive', data => {
 });
 
 socket.on('left', name => {
-    append(`${name}`, `${name} left the chat`, 'right');
+    append(`${name}`, `<span left>${name} left the chat</span>`, 'right');
     scrollToBottom();
 });
 

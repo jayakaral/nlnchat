@@ -1,7 +1,7 @@
-/* body {
-    height: 100vh;
-    background-image: linear-gradient(rgb(255, 255, 255), rgb(109, 39, 233));
-} */
+body {
+    margin: 0;
+    padding: 0;
+}
 
 * {
     scrollbar-color: rgba(0, 0, 0, .2) hsla(0, 0%, 100%, .1);
@@ -23,19 +23,23 @@ h1 {
     text-align: center;
 }
 
-.container {
+div.main {
+    background-color: #e5ddd5;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
     max-width: 955px;
     margin: auto;
-    border: 1px solid #000;
-    height: 60vh;
     padding: 10px;
+}
+
+.container {
+    height: 60vh;
     overflow-y: auto;
-    margin-bottom: 23px;
-    background-color: #e5ddd5;
+    margin-bottom: 5px;
 }
 
 .message {
-    width: 24%;
+    max-width: 85%;
     padding: 5px 10px;
     margin: 1px auto;
     position: relative;
@@ -55,6 +59,14 @@ h1 {
     float: right;
     clear: both;
     background-color: #dcf8c6;
+}
+
+.right p span[left] {
+    color: red;
+}
+
+.right p span[join] {
+    color: green;
 }
 
 .message h5 {
@@ -78,7 +90,7 @@ h1 {
 #messageInp {
     width: 100%;
     padding: 10px 20px;
-    border: 1px solid #000;
+    border: 1px solid #ced4da;
     border-radius: 30px;
     resize: none;
     max-height: 140px;
@@ -93,10 +105,10 @@ h1 {
 #send-btn {
     width: 45px;
     cursor: pointer;
-    border: 1px solid #000;
+    border: 1px solid #ced4da;
     border-radius: 50px;
     padding: 10px;
-    margin-left: 7px;
+    margin-left: 4px;
     text-align: center;
     display: none;
 }
