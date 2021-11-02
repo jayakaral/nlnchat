@@ -38,7 +38,8 @@ sendbtn.addEventListener('click', () => {
     socket.emit('send', message);
     sendbtn.style.display = "none";
     messageInput.value = "";
-    messageInput.style.height = '43px';
+    messageInput.focus();
+    messageInput.style.height = 'auto';
     scrollToBottom();
 })
 

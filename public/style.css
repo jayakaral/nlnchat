@@ -9,6 +9,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+
 /* .logo {
     display: block;
     margin: auto;
@@ -33,7 +34,7 @@ div.main {
 }
 
 .container {
-    height: 92%;
+    height: 75vh;
     overflow-y: auto;
     padding: 10px;
 }
@@ -101,7 +102,7 @@ div.main {
     border-radius: 30px;
     resize: none;
     max-height: 110px;
-    height: 43px;
+    height: auto;
 }
 
 #messageInp:focus,
