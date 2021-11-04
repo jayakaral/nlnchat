@@ -1,66 +1,91 @@
 const socket = io();
-let name;
-const sendbtn = document.getElementById('send-btn');
-const messageInput = document.getElementById('messageInp');
-const messageContainer = document.querySelector('.container');
-var audio = new Audio('ting.mp3');
+
+var username = 'try';
+var chats = document.querySelector('.container');
+var users_list = document.querySelector('.users-list');
+var users_count = document.querySelector('.users-count');
+var msg_send = document.querySelector('#send-btn');
+var user_msg = document.querySelector('#messageInp');
+var activeusers = document.querySelector('.activeusers');
+var switchbtn = document.querySelector('.navbar button');
+
 do {
-    name = prompt('Please enter your name: ')
-} while (!name)
+    username = prompt('Please enter your name: ')
+} while (!username);
 
-const append = (cname, message, position) => {
-    const d = new Date();
-    let lt = d.toLocaleTimeString();
-    const messageElement = document.createElement('div');
-    messageElement.innerHTML = `<h5>${cname} | ${lt}</h5><p>${message}</p>`;
-    messageElement.classList.add('message');
-    messageElement.classList.add(position);
-    messageContainer.append(messageElement);
-    if (position == 'left') {
-        audio.play();
-    }
-}
-
-messageInput.oninput = () => {
-    if (messageInput.value == "") {
-        sendbtn.style.display = "none";
+user_msg.oninput = () => {
+    if (user_msg.value == "") {
+        msg_send.style.display = "none";
     } else {
-        sendbtn.style.display = "block";
+        msg_send.style.display = "block";
     }
-    messageInput.style.height = 'auto';
-    messageInput.style.height = messageInput.scrollHeight + 'px';
-
+    user_msg.style.height = 'auto';
+    user_msg.style.height = user_msg.scrollHeight + 'px';
 };
 
-sendbtn.addEventListener('click', () => {
-    const message = messageInput.value;
-    append(`${name}`, `${message}`, 'right');
-    socket.emit('send', message);
-    sendbtn.style.display = "none";
-    messageInput.value = "";
-    messageInput.focus();
-    messageInput.style.height = 'auto';
-    scrollToBottom();
-})
-
-
-socket.emit('new-user-joined', name);
-
-socket.on('user-joined', name => {
-    append(`${name}`, `<span join>${name} joined the chat</span>`, 'right');
-    scrollToBottom();
+switchbtn.addEventListener('click', () => {
+    activeusers.classList.toggle('active');
 });
 
-socket.on('receive', data => {
-    append(`${data.name}`, `${data.message}`, 'left');
-    scrollToBottom();
+//It will be called when user will join
+socket.emit('new-user-joined', username);
+
+//notifying that user is joined
+socket.on('user-connected', (socket_name) => {
+    userJoinLeft(socket_name, 'joined');
 });
 
-socket.on('left', name => {
-    append(`${name}`, `<span left>${name} left the chat</span>`, 'right');
-    scrollToBottom();
-});
-
-function scrollToBottom() {
-    messageContainer.scrollTop = messageContainer.scrollHeight
+// function to create joined/left status div
+userJoinLeft = (name, status) => {
+    const div = document.createElement('div');
+    div.innerHTML = `${name} ${status} the chat`;
+    div.classList.add('user-join', status);
+    chats.appendChild(div);
 }
+
+//notifying that user is left
+socket.on('user-disconnected', (user) => {
+    userJoinLeft(user, 'left');
+});
+
+//for updating users list and user counts
+socket.on('user-list', (users) => {
+    users_list.innerHTML = '';
+    users_arr = Object.values(users);
+    for (let i = 0; i < users_arr.length; i++) {
+        let p = document.createElement('li');
+        p.innerText = users_arr[i];
+        users_list.appendChild(p);
+    }
+    users_count.innerHTML = users_arr.length;
+});
+
+// for sending messages
+msg_send.addEventListener('click', () => {
+    let data = {
+        user: username,
+        msg: user_msg.value
+    };
+    if (user_msg.value != '') {
+        appendMessage(data, 'right');
+        socket.emit('message', data)
+        user_msg.value = '';
+        user_msg.focus();
+    };
+});
+
+appendMessage = (data, status) => {
+    const d = new Date();
+    let lt = d.toLocaleTimeString();
+    let div = document.createElement('div');
+    div.classList.add('message', status);
+    let content = `<h5>${data.user} | ${lt}</h5>
+                    <p>${data.msg}</p>`;
+    div.innerHTML = content;
+    chats.appendChild(div);
+    chats.scrollTop = chats.scrollHeight;
+}
+
+socket.on('message', (data) => {
+    appendMessage(data, 'left');
+})
