@@ -1,183 +1,93 @@
-    body {
-        margin: 0;
-        padding: 0;
+const socket = io();
+
+var username = 'try';
+var chats = document.querySelector('.container');
+var users_list = document.querySelector('.users-list');
+var users_count = document.querySelector('.users-count');
+var msg_send = document.querySelector('#send-btn');
+var user_msg = document.querySelector('#messageInp');
+var activeusers = document.querySelector('.activeusers');
+var switchbtn = document.querySelector('.navbar button');
+
+do {
+    username = prompt('Please enter your name: ')
+} while (!username);
+
+user_msg.oninput = () => {
+    if (user_msg.value == "") {
+        msg_send.style.display = "none";
+    } else {
+        msg_send.style.display = "block";
     }
-    
-    * {
-        scrollbar-color: rgba(0, 0, 0, .2) hsla(0, 0%, 100%, .1);
-        scrollbar-width: thin;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    user_msg.style.height = 'auto';
+    user_msg.style.height = user_msg.scrollHeight + 'px';
+};
+
+switchbtn.addEventListener('click', () => {
+    activeusers.classList.toggle('active');
+});
+
+//It will be called when user will join
+socket.emit('new-user-joined', username);
+
+//notifying that user is joined
+socket.on('user-connected', (socket_name) => {
+    userJoinLeft(socket_name, 'joined');
+});
+
+// function to create joined/left status div
+userJoinLeft = (name, status) => {
+    const d = new Date();
+    let lt = d.toLocaleTimeString();
+    const div = document.createElement('div');
+    div.innerHTML = `<b>${lt} | </b>${name} ${status} the chat`;
+    div.classList.add('user-join', status);
+    chats.appendChild(div);
+}
+
+//notifying that user is left
+socket.on('user-disconnected', (user) => {
+    userJoinLeft(user, 'left');
+});
+
+//for updating users list and user counts
+socket.on('user-list', (users) => {
+    users_list.innerHTML = '';
+    users_arr = Object.values(users);
+    for (let i = 0; i < users_arr.length; i++) {
+        let p = document.createElement('li');
+        p.innerText = users_arr[i];
+        users_list.appendChild(p);
     }
-    /* .logo {
-    display: block;
-    margin: auto;
-    width: 50px;
-    height: 50px;
-} */
-    
-    h1 {
-        margin-top: 12px;
-        font-size: 30px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        text-align: center;
-    }
-    
-    div.main {
-        background-color: #e5ddd5;
-        border: none;
-        max-width: 955px;
-        margin: auto;
-        padding: 0;
-        height: 99%;
-        position: relative;
-    }
-    
-    .navbar {
-        background-color: #00ff37;
-        border: 1px solid #ced4da;
-        padding: 5px;
-        height: 25px;
-        margin: auto;
-    }
-    
-    .navbar button {
-        float: right;
-        background: none;
-        border: none;
-        font-weight: bold;
-    }
-    
-    .activeusers {
-        background-color: #ffffff;
-        border: 1px solid #ced4da;
-        margin: auto;
-        position: absolute;
-        top: 35px;
-        left: 0;
-        right: 0;
-        display: none;
-    }
-    
-    .activeusers.active {
-        display: block;
-    }
-    
-    .activeusers p {
-        padding: 12px;
-        margin: 0;
-        background-color: #f6f6f6;
-    }
-    
-    .activeusers span {
-        float: right;
-    }
-    
-    .users-count {
-        background-color: #008cff;
-        padding: 2px 8px;
-        border-radius: 100%;
-        color: #fff;
-    }
-    
-    .users-list {
-        margin: 0;
-        padding-bottom: 5px;
-    }
-    
-    .container {
-        height: 65vh;
-        overflow-y: auto;
-        padding: 10px;
-    }
-    
-    .user-join {
-        width: fit-content;
-        max-width: 85%;
-        padding: 5px 10px;
-        margin: 1px auto;
-        border-radius: 10px;
-        box-shadow: 0 1px .5px rgba(0, 0, 0, .13);
-        background-color: #dcf8c6;
-    }
-    
-    .user-join.left {
-        color: red;
-    }
-    
-    .user-join.joined {
-        color: green;
-    }
-    
-    .message {
-        max-width: 85%;
-        padding: 5px 10px;
-        margin: 2px auto;
-        border-radius: 10px;
-        color: #303030;
-        box-shadow: 0 1px .5px rgba(0, 0, 0, .13);
-        word-break: break-word;
-    }
-    
-    .message.left {
-        float: left;
-        clear: both;
-        background-color: #fff;
-    }
-    
-    .message.right {
-        float: right;
-        clear: both;
-        background-color: #dcf8c6;
-    }
-    
-    .message h5 {
-        margin: 0;
-        border-bottom: 1px solid #ced4da;
-        padding-bottom: 2px;
-    }
-    
-    .message p {
-        margin: 0;
-        white-space: pre-wrap;
-    }
-    
-    .send-container {
-        display: flex;
-        margin: auto;
-        max-width: 955px;
-        width: 100%;
-        background: rgba(0, 0, 0, 0.15);
-        padding: 0.25rem;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        box-sizing: border-box;
-    }
-    
-    #messageInp {
-        width: 100%;
-        padding: 10px 20px;
-        border: 1px solid #ced4da;
-        border-radius: 30px;
-        resize: none;
-        max-height: 110px;
-        height: auto;
-    }
-    
-    #messageInp:focus,
-    #messageInp:active {
-        outline: 0;
-    }
-    
-    #send-btn {
-        width: 45px;
-        height: 45px;
-        cursor: pointer;
-        border: 1px solid #ced4da;
-        border-radius: 50px;
-        padding: 10px;
-        margin-left: 4px;
-        text-align: center;
-        display: none;
-    }
+    users_count.innerHTML = users_arr.length;
+});
+
+// for sending messages
+msg_send.addEventListener('click', () => {
+    let data = {
+        user: username,
+        msg: user_msg.value
+    };
+    if (user_msg.value != '') {
+        appendMessage(data, 'right');
+        socket.emit('message', data)
+        user_msg.value = '';
+        user_msg.focus();
+    };
+});
+
+appendMessage = (data, status) => {
+    const d = new Date();
+    let lt = d.toLocaleTimeString();
+    let div = document.createElement('div');
+    div.classList.add('message', status);
+    let content = `<h5>${data.user} | ${lt}</h5>
+                    <p>${data.msg}</p>`;
+    div.innerHTML = content;
+    chats.appendChild(div);
+    chats.scrollTop = chats.scrollHeight;
+}
+
+socket.on('message', (data) => {
+    appendMessage(data, 'left');
+})
