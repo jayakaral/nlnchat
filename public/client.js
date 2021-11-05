@@ -1,6 +1,6 @@
 const socket = io();
 
-var username = 'try';
+var username;
 var chats = document.querySelector('.container');
 var users_list = document.querySelector('.users-list');
 var users_count = document.querySelector('.users-count');
@@ -37,8 +37,10 @@ socket.on('user-connected', (socket_name) => {
 
 // function to create joined/left status div
 userJoinLeft = (name, status) => {
+    const d = new Date();
+    let lt = d.toLocaleTimeString();
     const div = document.createElement('div');
-    div.innerHTML = `${name} ${status} the chat`;
+    div.innerHTML = `<b>${lt} | </b>${name} ${status} the chat`;
     div.classList.add('user-join', status);
     chats.appendChild(div);
 }
