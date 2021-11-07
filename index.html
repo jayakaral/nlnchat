@@ -1,28 +1,20 @@
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat app</title>
     <link rel="stylesheet" href="/style.css">
-    <!-- <link rel="stylesheet" href="/public/style.css"> -->
 </head>
-
 <body>
-    <!-- <nav>
-        <img class="logo" src="/wassup.png" alt="">
-        <h1>welcome to iChat</h1>
-    </nav> -->
-
     <div class="main">
         <div class="navbar">
-            <button>|||</button>
+            <p>ChatApp</p>
+            <button>Active Users</button>
         </div>
         <div class="activeusers">
             <p>Active Users <span class="users-count"></span></p>
-            <ol class="users-list">
-            </ol>
+            <ol class="users-list"></ol>
         </div>
         <div class="container"></div>
         <div class="send-container">
@@ -30,11 +22,7 @@
             <button id="send-btn"><svg viewBox="0 0 24 24" width="24" height="24" class=""><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg></button>
         </div>
     </div>
-
     <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="/client.js"></script>
-    <!-- <script defer src="/public/client.js"></script> -->
-
 </body>
-
 </html>
