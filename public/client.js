@@ -74,6 +74,8 @@ msg_send.addEventListener('click', () => {
         user_msg.value = '';
         user_msg.focus();
     };
+    msg_send.style.display = "none";
+    user_msg.style.height = 'auto';
 });
 
 appendMessage = (data, status) => {
