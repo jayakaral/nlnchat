@@ -43,6 +43,7 @@ userJoinLeft = (name, status) => {
     div.innerHTML = `<b>${lt} | </b>${name} ${status} the chat`;
     div.classList.add('user-join', status);
     chats.appendChild(div);
+    chats.scrollTop = chats.scrollHeight;
 }
 
 //notifying that user is left
