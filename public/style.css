@@ -6,6 +6,19 @@
     /* scroll-behavior: smooth; */
 }
 
+::-webkit-scrollbar {
+    width: 0;
+}
+
+#progressbar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background: silver;
+}
+
 .main {
     display: flex;
     flex-direction: column;

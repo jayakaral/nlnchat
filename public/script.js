@@ -12,6 +12,20 @@ do {
     username = prompt('Please enter your name to chat: ')
 } while (!username);
 
+let progressbar = document.querySelector('#progressbar');
+let container = document.querySelector('.container');
+
+progressbar.style.height = Math.floor(container.offsetHeight / container.scrollHeight * container.offsetHeight) + 'px';
+
+container.onscroll = scrollbar;
+
+function scrollbar() {
+    let barHeight = container.offsetHeight / container.scrollHeight * container.offsetHeight;
+    progressbar.style.height = barHeight + 'px';
+    let nh = (container.offsetHeight / (container.scrollHeight - container.scrollTop) * container.offsetHeight) - (barHeight)
+    progressbar.style.top = nh + 'px';
+}
+
 user_msg.focus();
 
 user_msg.oninput = () => {
@@ -42,6 +56,7 @@ userJoinLeft = (name, status) => {
     div.classList.add('user-join', status);
     chats.appendChild(div);
     chats.scrollTop = chats.scrollHeight;
+    scrollbar();
 }
 
 //notifying that user is left
@@ -87,6 +102,7 @@ appendMessage = (data, status) => {
     div.innerHTML = content;
     chats.appendChild(div);
     chats.scrollTop = chats.scrollHeight;
+    scrollbar();
 };
 
 socket.on('message', (data) => {
