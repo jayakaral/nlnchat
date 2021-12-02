@@ -1,6 +1,6 @@
 const socket = io();
 
-var username;
+var username = location.search.substr(6);
 var chats = document.querySelector('.container');
 var users_list = document.querySelector('.users-list');
 var users_count = document.querySelector('.users-count');
@@ -8,9 +8,9 @@ var msg_send = document.querySelector('#send-btn');
 var user_msg = document.querySelector('#messageInp');
 var activeusers = document.querySelector('.activeusers');
 
-do {
-    username = prompt('Please enter your name to chat: ')
-} while (!username);
+// do {
+//     username = prompt('Please enter your name to chat: ')
+// } while (!username);
 
 let progressbar = document.querySelector('#progressbar');
 let container = document.querySelector('.container');
