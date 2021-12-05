@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ChatApp</title>
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+    <div class="main">
+        <span class="users-count"></span>
+        <div class="activeusers">
+            <p>activeusers</p>
+            <ol class="users-list"></ol>
+        </div>
+
+        <div class="container">
+            <div id="progressbar"></div>
+        </div>
+        <div class="send-container">
+            <textarea name="messageInp" id="messageInp" autocomplete="off" spellcheck="false" rows="1" style="height: auto;"></textarea>
+            <div class="btnArea">
+                <button id="send-btn"><svg viewBox="0 0 24 24" width="24" height="24" class=""><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg></button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/script.js"></script>
+</body>
+
+</html>
